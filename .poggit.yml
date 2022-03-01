@@ -1,0 +1,12 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/MulqiGaming64/EconomyEnchant
+build-by-default: true
+branches:
+- main
+projects:
+  EconomyEnchant:
+    path: ""
+    icon: "icon.png"
+    libs:
+      - src: Vecnavium/FormsUI/FormsUI
+        version: ^1.0.0
+...
