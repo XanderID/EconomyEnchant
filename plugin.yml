@@ -1,0 +1,16 @@
+---
+name: EconomyEnchant
+version: 1.0.0
+main: MulqiGaming64\EconomyEnchant\EconomyEnchant
+api: 4.0.0
+author: MulqiGaming64
+description: a Enchant Shop in UI
+softdepend:
+ - EconomyAPI
+ - BedrockEconomy
+
+permissions:
+ economyenchant.cmd:
+  default: true
+  description: EconomyEnchant Commands
+...
