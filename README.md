@@ -1,0 +1,2 @@
+# EconomyEnchant
+none
