@@ -1,7 +1,10 @@
 ---
 # Your Economy plugin name
-# Available: BedrockEconomy, EconomyAPI, Auto
+# Available: BedrockEconomy, EconomyAPI, Capital, Auto
 economy: "Auto"
+
+# Selector for Capital Economys
+selector: []
 
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true

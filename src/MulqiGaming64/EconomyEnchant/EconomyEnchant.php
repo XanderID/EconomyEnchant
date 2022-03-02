@@ -43,6 +43,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use MulqiGaming64\EconomyEnchant\Commands\EconomyEnchantCommands;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
 use MulqiGaming64\EconomyEnchant\Provider\Types\EconomyAPI;
+use MulqiGaming64\EconomyEnchant\Provider\Types\Capital;
 use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
 
 use Vecnavium\FormsUI\SimpleForm;
@@ -72,11 +73,14 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 
 class EconomyEnchant extends PluginBase implements Listener
 {
-    public const availableEconomy = ["BedrockEconomy", "EconomyAPI"];
+    public const availableEconomy = ["BedrockEconomy", "Capital", "EconomyAPI"];
 
     /** All status Provider */
     public const STATUS_SUCCESS = 0;
     public const STATUS_ENOUGH = 1;
+    
+    /** @return EconomyEnchant */
+    private static EconomyEnchant $instance;
 
     /** @var array $allEnchantment */
     private $allEnchantment = [];
@@ -89,20 +93,26 @@ class EconomyEnchant extends PluginBase implements Listener
 
     /** @var string $provider */
     private $provider = "";
+    
+    protected function onLoad(): void {
+		self::$instance = $this; // Preparing Instance
+	}
 
     public function onEnable(): void
     {
         $this->saveDefaultConfig();
 
         $economy = $this->getEconomyType();
-        $this->provider = $economy;
+        if($economy !== null){
+       	 $this->provider = $economy;
 
-        $this->mode = $this->getConfig()->get("mode");
-        $this->enchantTable = $this->getConfig()->get("enchant-table");
-        $this->registerEnchantConfig();
+        	$this->mode = $this->getConfig()->get("mode");
+        	$this->enchantTable = $this->getConfig()->get("enchant-table");
+      	  $this->registerEnchantConfig();
 
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getServer()->getCommandMap()->register("EconomyEnchant", new EconomyEnchantCommands($this));
+			$this->getServer()->getPluginManager()->registerEvents($this, $this);
+        	$this->getServer()->getCommandMap()->register("EconomyEnchant", new EconomyEnchantCommands($this));
+        }
     }
 
     /** @return null|string */
@@ -115,16 +125,24 @@ class EconomyEnchant extends PluginBase implements Listener
         switch ($economys) {
             case "bedrockeconomy":
                 if ($plugin->getPlugin("BedrockEconomy") == null) {
-                    $plugin->disablePlugin($this);
                     $this->getLogger()->alert("Your Economy's plugin: BedrockEconomy, Not found Disabling Plugin!");
+                    $plugin->disablePlugin($this);
                     return null;
                 }
                 $economy = "BedrockEconomy";
             break;
+            case "capital":
+      	      if ($plugin->getPlugin("Capital") == null) {
+                    $this->getLogger()->alert("Your Economy's plugin: Capital, Not found Disabling Plugin!");
+                    $plugin->disablePlugin($this);
+                    return null;
+                }
+                $economy = "Capital";
+            break;
             case "economyapi":
                 if ($plugin->getPlugin("EconomyAPI") == null) {
-                    $plugin->disablePlugin($this);
                     $this->getLogger()->alert("Your Economy's plugin: EconomyAPI, Not found Disabling Plugin!");
+                    $plugin->disablePlugin($this);
                     return null;
                 }
                 $economy = "EconomyAPI";
@@ -139,8 +157,8 @@ class EconomyEnchant extends PluginBase implements Listener
                     }
                 }
                 if (!$found) {
-                    $plugin->disablePlugin($this);
                     $this->getLogger()->alert("all economy plugins could not be found, Disabling Plugin!");
+                    $plugin->disablePlugin($this);
                     return null;
                 }
             break;
@@ -179,6 +197,23 @@ class EconomyEnchant extends PluginBase implements Listener
     	}
     	return true;
     }
+    
+    /**
+	 * @internal
+	 * @return EconomyEnchant
+	 */
+	public static function getInstance(): EconomyEnchant
+	 {
+		return self::$instance;
+	}
+	
+	/**
+	* @return array
+	*/
+	public function getSelector(): array
+	{
+		return $this->getConfig()->get("selector");
+	}
 
     /**
     * Get message type
@@ -487,6 +522,8 @@ class EconomyEnchant extends PluginBase implements Listener
             $call = new EconomyAPI();
         } elseif ($this->provider == "BedrockEconomy") {
             $call = new BedrockEconomy();
+        } elseif ($this->provider == "Capital") {
+            $call = new Capital();
         }
         return $call;
     }
