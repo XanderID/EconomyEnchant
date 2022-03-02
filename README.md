@@ -2,13 +2,13 @@
 
 EconomyEnchant Shop For Pocketmine 4.0.0, With Many features
 
-# Commands
+## Commands
 
 Commands | Default
 --- | ---
 `/eshop` | True
 
-# Feature
+## Feature
 - Support Multiple Economys
 - Support EnchantTable Direct
 - Auto Check Enchant Available in Hand
@@ -17,8 +17,14 @@ Commands | Default
 - Customable Message
 - Customable Form
 
+## Supported Economy Providers
+
+* [EconomyAPI](https://poggit.pmmp.io/p/EconomyAPI) by onebone/poggit-orphanage
+* [BedrockEconomy](https://poggit.pmmp.io/p/BedrockEconomy) by cooldogedev
+* [Capital](https://poggit.pmmp.io/p/Capital/) By SOF3
+
+
 # To-Dos
-- Support Capital Economys
 - Support PiggyCustomEnchants
 
 # Config
