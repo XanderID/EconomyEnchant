@@ -33,7 +33,7 @@ Commands | Default
 
 ---
 # Your Economy plugin name
-# Available: BedrockEconomy, EconomyAPI, Auto
+# Available: BedrockEconomy, EconomyAPI, Capital, Auto
 economy: "Auto"
 
 # Selector for Capital Economys
