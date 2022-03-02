@@ -36,6 +36,9 @@ Commands | Default
 # Available: BedrockEconomy, EconomyAPI, Auto
 economy: "Auto"
 
+# Selector for Capital Economys
+selector: []
+
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
 
