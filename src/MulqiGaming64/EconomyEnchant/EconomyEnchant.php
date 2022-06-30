@@ -46,8 +46,13 @@ use MulqiGaming64\EconomyEnchant\Provider\Types\EconomyAPI;
 use MulqiGaming64\EconomyEnchant\Provider\Types\Capital;
 use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
 
-use Vecnavium\FormsUI\SimpleForm;
-use Vecnavium\FormsUI\CustomForm;
+use DaPigGuy\PiggyCustomEnchants\PiggyCustomEnchants;
+use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
+use DaPigGuy\PiggyCustomEnchants\enchants\CustomEnchant;
+use DaPigGuy\PiggyCustomEnchants\utils\Utils as PiggyUtils;
+
+use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\SimpleForm;
+use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\CustomForm;
 
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -62,8 +67,10 @@ use pocketmine\item\Shovel;
 use pocketmine\item\Hoe;
 use pocketmine\item\FishingRod;
 use pocketmine\item\FlintSteel;
+use pocketmine\item\Compass;
 use pocketmine\item\Shears;
 use pocketmine\item\Bow;
+use pocketmine\item\Durable;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\data\bedrock\LegacyItemIdToStringIdMap;
 use pocketmine\item\enchantment\ItemFlags;
@@ -90,9 +97,11 @@ class EconomyEnchant extends PluginBase implements Listener
     private $mode = true;
     /** @var bool $enchantTable */
     private $enchantTable = true;
+    /** @var bool $piggyCE */
+    private $piggyCE = false;
 
-    /** @var string $provider */
-    private $provider = "";
+    /** @var Provider $provider */
+    private $provider = null;
     
     protected function onLoad(): void {
 		self::$instance = $this; // Preparing Instance
@@ -104,7 +113,11 @@ class EconomyEnchant extends PluginBase implements Listener
 
         $economy = $this->getEconomyType();
         if($economy !== null){
-       	 $this->provider = $economy;
+       	 $this->registerProvider($economy);
+       
+       	if (class_exists(PiggyCustomEnchants::class)) {
+        		$this->piggyCE = true;
+   	     }
 
         	$this->mode = $this->getConfig()->get("mode");
         	$this->enchantTable = $this->getConfig()->get("enchant-table");
@@ -256,12 +269,12 @@ class EconomyEnchant extends PluginBase implements Listener
     }
 
     /**
-    * Get all Available enchantment which is not blacklisted
+    * Add all Available enchantment which is not blacklisted
     * @return void
     */
     public function addAllEnchant(array $blacklist): void
     {
-        // Get all Available enchantment
+        // Get all Available enchantment Vanilla
         $all = VanillaEnchantments::getAll();
 
         // add only if not Blacklisted
@@ -279,11 +292,40 @@ class EconomyEnchant extends PluginBase implements Listener
                 $this->allEnchantment[$displayname] = ["name" => strtolower($name), "enchant" => $enchant];
             }
         }
+        
+        if($this->piggyCE) $this->addPiggyEnchant($blacklist);
+    }
+    
+    /**
+    * Add all Available enchantment which is not blacklisted
+    * @return void
+    */
+    public function addPiggyEnchant(array $blacklist): void
+    {
+        // Get all Available enchantment PiggyCE
+        $all = CustomEnchantManager::getEnchantments();
+
+        // add only if not Blacklisted
+        foreach ($all as $id => $enchant) {
+        	$name = str_replace(" ", "_", $enchant->name); // Replace space name with underline
+            if (!in_array(strtolower($name), $blacklist)) {
+                // Display name for Button
+                // _ replaced to space and 1 letter uppercase
+                $display = str_replace("_", " ", $name);
+                $display = explode(" ", $display);
+                $displayname = ucfirst(strtolower($display[0]));
+                if (isset($display[1])) {
+                    $displayname .= " " . ucfirst(strtolower($display[1]));
+                }
+
+                $this->allEnchantment[$displayname] = ["name" => strtolower($name), "enchant" => $enchant];
+            }
+        }
     }
 
     /**
     * Get Item Flag from Item But No for ItemBlock
-    * @return int
+    * @return null|int
     */
     public static function getItemFlags(Item $item): ?int
     {
@@ -346,6 +388,7 @@ class EconomyEnchant extends PluginBase implements Listener
 
     /**
     * Get Available enchantment by Flag
+    * Useless flags on PiggyCustonEnchants
     * @return array
     */
     public function getEnchantList(int $flag, Item $item = null): array
@@ -353,12 +396,27 @@ class EconomyEnchant extends PluginBase implements Listener
         $result = [];
         foreach ($this->allEnchantment as $display => $enchant) {
             if (!$this->getBlacklistItem($item, $enchant["name"])) {// check if blacklisted item
-                if ($enchant["enchant"]->hasPrimaryItemType($flag) || $enchant["enchant"]->hasSecondaryItemType($flag)) {
-                    if ($this->mode) {
-                        $result[$display] = $enchant;
-                    } else {
-                        if (isset($this->enchantConfig[$enchant["name"]])) {
-                            $result[$display] = $enchant;
+				// Sorry for double method and double function
+				if($enchant["enchant"] instanceof CustomEnchant){
+					if ($item !== null) {
+						if(PiggyUtils::itemMatchesItemType($item, $enchant["enchant"]->getItemType())){
+                	 	   if ($this->mode) {
+                     	   	$result[$display] = $enchant;
+              	 	     } else {
+                      	  	if (isset($this->enchantConfig[$enchant["name"]])) {
+                            		$result[$display] = $enchant;
+                            	}
+                            }
+                        }
+                    }
+				} else {
+               	 if ($enchant["enchant"]->hasPrimaryItemType($flag) || $enchant["enchant"]->hasSecondaryItemType($flag)) {
+                	    if ($this->mode) {
+                     	   $result[$display] = $enchant;
+              	      } else {
+                        	if (isset($this->enchantConfig[$enchant["name"]])) {
+                            	$result[$display] = $enchant;
+                            }
                         }
                     }
                 }
@@ -397,12 +455,21 @@ class EconomyEnchant extends PluginBase implements Listener
         // Get Flags on Item
         $flag = $this->getItemFlags($item);
         if ($flag == null) {
-            $player->sendMessage($this->getMessage("err-item"));
-            return false;
+            $flag = ItemFlags::NONE;
         }
 
         // List all enchantment by Flag
         $list = $this->getEnchantList($flag, $item);
+        
+        // sort enchant names alphabetically
+		ksort($list);
+
+        // Check if item cannot be enchant
+		if(empty($list)){
+			$player->sendMessage($this->getMessage("err-item"));
+            return false;
+         }
+         
         // Create Form
         $form = new SimpleForm(function (Player $player, $data = null) {
             if ($data === null) {
@@ -440,7 +507,7 @@ class EconomyEnchant extends PluginBase implements Listener
         // Player Item Hand
         $item = $player->getInventory()->getItemInHand();
         $nowlevel = (int) $item->hasEnchantment($enchantment) ? $item->getEnchantmentLevel($enchantment) : 0;
-        $maxlevel = (int) $encdata["max-level"];
+        $maxlevel = (int) $enchantment->getMaxLevel();
         $price = (int) $encdata["price"];
 
         // Preparing form
@@ -514,17 +581,24 @@ class EconomyEnchant extends PluginBase implements Listener
         $item->addEnchantment(new EnchantmentInstance($enchant, $level)); // Add Enchantment
         $player->getInventory()->setItemInHand($item); // Send back item to Player
     }
+    
+    /** @return void */
+    private function registerProvider(string $provider): void
+    {
+        if ($provider == "EconomyAPI") {
+            $call = new EconomyAPI();
+        } elseif ($provider == "BedrockEconomy") {
+            $call = new BedrockEconomy();
+        } elseif ($provider == "Capital") {
+            $call = new Capital();
+        }
+        
+        $this->provider = $call;
+    }
 
     /** @return Provider */
     public function getProvider(): Provider
     {
-        if ($this->provider == "EconomyAPI") {
-            $call = new EconomyAPI();
-        } elseif ($this->provider == "BedrockEconomy") {
-            $call = new BedrockEconomy();
-        } elseif ($this->provider == "Capital") {
-            $call = new Capital();
-        }
-        return $call;
+        return $this->provider;
     }
 }

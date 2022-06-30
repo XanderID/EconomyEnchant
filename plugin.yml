@@ -1,6 +1,6 @@
 ---
 name: EconomyEnchant
-version: 1.0.0
+version: 1.0.1
 main: MulqiGaming64\EconomyEnchant\EconomyEnchant
 api: 4.0.0
 author: MulqiGaming64
@@ -8,6 +8,7 @@ description: a EconomyEnchant Shop in UI
 softdepend:
  - EconomyAPI
  - BedrockEconomy
+ - PiggyCustomEnchants
  - Capital
 
 permissions:

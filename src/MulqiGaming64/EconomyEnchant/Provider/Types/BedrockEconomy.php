@@ -38,13 +38,14 @@ use MulqiGaming64\EconomyEnchant\EconomyEnchant;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
 use pocketmine\player\Player;
 
-use cooldogedev\BedrockEconomy\BedrockEconomy as BedrockEconomyPL;
 use cooldogedev\BedrockEconomy\api\BedrockEconomyAPI;
+use cooldogedev\BedrockEconomy\api\version\LegacyBEAPI;
+use cooldogedev\BedrockEconomy\BedrockEconomy as BedrockEconomyPL;
 use cooldogedev\BedrockEconomy\libs\cooldogedev\libSQL\context\ClosureContext;
 
 class BedrockEconomy extends Provider
 {
-    /** @var BedrockEconomyAPI $bedrockEconomyAPI */
+    /** @var LegacyBEAPI $bedrockEconomyAPI */
     private $bedrockEconomyAPI;
 
     /** @var callable $callable */
@@ -52,7 +53,7 @@ class BedrockEconomy extends Provider
 
     public function __construct()
     {
-        $this->bedrockEconomyAPI = BedrockEconomyAPI::getInstance();
+        $this->bedrockEconomyAPI = BedrockEconomyAPI::legacy();
     }
 
     /** @return void */
@@ -63,21 +64,19 @@ class BedrockEconomy extends Provider
 
     public function process(Player $player, int $amount): void
     {
-        $this->bedrockEconomyAPI->getPlayerBalance(
+        $this->bedrockEconomyAPI->subtractFromPlayerBalance(
             $player->getName(),
+            $amount,
             ClosureContext::create(
-                function (?int $balance) use ($amount, $player): void {
-                    if ($balance !== null) {
-                        if ($balance >= $amount) {
-                            $this->handle(EconomyEnchant::STATUS_SUCCESS);
-                            $this->bedrockEconomyAPI->subtractFromPlayerBalance($player->getName(), $amount); // Reduce to Player Balance
-                        } else {
-                            $this->handle(EconomyEnchant::STATUS_ENOUGH);
-                        }
+                function (bool $wasUpdated): void {
+                    if($wasUpdated){
+                        $this->handle(EconomyEnchant::STATUS_SUCCESS);
+                    } else {
+                        $this->handle(EconomyEnchant::STATUS_ENOUGH);
                     }
                 }
             )
-        );
+        ); // Sorry for the carelessness, the money should have been reduced immediately
     }
 
     /** @param int $status */

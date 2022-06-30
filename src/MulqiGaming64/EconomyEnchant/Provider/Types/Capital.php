@@ -47,10 +47,15 @@ class Capital extends Provider
 	
     /** @var callable $callable */
     private $callable;
+    
+    private $selector;
 
     public function __construct()
     {
-        // I'm alone here :(
+    	$selector = EconomyEnchant::getInstance()->getSelector(); // Load Selector from Config
+        CapitalPL::api(self::CAPITAL_VERSION, function(CapitalPL $api) use($selector){
+     	 $this->selector = $api->completeConfig($selector);
+	    });
     }
 
     /** @return void */
@@ -60,22 +65,20 @@ class Capital extends Provider
     }
 
     public function process(Player $player, int $amount): void
-    {
-    	$selector = EconomyEnchant::getInstance()->getSelector(); // Load Selector from Config
-		CapitalPL::api(self::CAPITAL_VERSION, function(CapitalPL $api) use($player, $amount, $selector) {
-			$schemas = $api->completeConfig($selector); // Load schemas
+    { 
+    	CapitalPL::api(self::CAPITAL_VERSION, function(CapitalPL $api) use($player, $amount){
 			try {
         		yield from $api->takeMoney(
           		  "EconomyEnchant",
        		     $player,
-          		  $schemas,
+          		  $this->selector,
           		  $amount, 
           		  new LabelSet(["reason" => "Buy a Enchantment from EconomyEnchant"]),
         		);
         		$this->handle(EconomyEnchant::STATUS_SUCCESS);
 			} catch(CapitalException $error) {
 				$this->handle(EconomyEnchant::STATUS_ENOUGH);
-      	  }
+      	 }
 		});
     }
 

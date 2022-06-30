@@ -10,6 +10,7 @@ Commands | Default
 
 ## Feature
 - Support Multiple Economys
+- Support PiggyCustomEnchants
 - Support EnchantTable Direct
 - Auto Check Enchant Available in Hand
 - Blacklist System
@@ -25,7 +26,7 @@ Commands | Default
 
 
 # To-Dos
-- Support PiggyCustomEnchants
+- Add more detail transaction on Capital Label
 
 # Config
 
@@ -92,15 +93,11 @@ mode: true
 enchantment:
  # Name Enchantment
  sharpness:
-  # Max Level to Enchant
-  max-level: 5
   # Price
   price: 1000
  # Default, If the enchantment is not set above
  # it will be redirected here
  default:
-  # Max Level to Enchant
-  max-level: 5
   # Price
   price: 10000
   

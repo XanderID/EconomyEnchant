@@ -59,15 +59,11 @@ mode: true
 enchantment:
  # Name Enchantment
  sharpness:
-  # Max Level to Enchant
-  max-level: 5
   # Price
   price: 1000
  # Default, If the enchantment is not set above
  # it will be redirected here
  default:
-  # Max Level to Enchant
-  max-level: 5
   # Price
   price: 10000
   
