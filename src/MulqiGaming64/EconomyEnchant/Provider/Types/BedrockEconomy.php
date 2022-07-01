@@ -1,12 +1,12 @@
 <?php
 
 /*
- *  __  __       _       _  ____                 _              __   _  _   
- * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |  
- * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_ 
+ *  __  __       _       _  ____                 _              __   _  _
+ * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |
+ * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_
  * | |  | | |_| | | (_| | | |_| | (_| | | | | | | | | | | (_| | (_) |__   _|
- * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|  
- *                    |_|                                |___/              
+ * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|
+ *                    |_|                                |___/
  *
  * Copyright (c) 2022 MulqiGaming64
  *
@@ -34,57 +34,57 @@ declare(strict_types=1);
 
 namespace MulqiGaming64\EconomyEnchant\Provider\Types;
 
+use cooldogedev\BedrockEconomy\api\BedrockEconomyAPI;
+use cooldogedev\BedrockEconomy\api\version\LegacyBEAPI;
+use cooldogedev\BedrockEconomy\libs\cooldogedev\libSQL\context\ClosureContext;
+
 use MulqiGaming64\EconomyEnchant\EconomyEnchant;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
 use pocketmine\player\Player;
-
-use cooldogedev\BedrockEconomy\api\BedrockEconomyAPI;
-use cooldogedev\BedrockEconomy\api\version\LegacyBEAPI;
-use cooldogedev\BedrockEconomy\BedrockEconomy as BedrockEconomyPL;
-use cooldogedev\BedrockEconomy\libs\cooldogedev\libSQL\context\ClosureContext;
+use function is_callable;
 
 class BedrockEconomy extends Provider
 {
-    /** @var LegacyBEAPI $bedrockEconomyAPI */
-    private $bedrockEconomyAPI;
+	/** @var LegacyBEAPI $bedrockEconomyAPI */
+	private $bedrockEconomyAPI;
 
-    /** @var callable $callable */
-    private $callable;
+	/** @var callable $callable */
+	private $callable;
 
-    public function __construct()
-    {
-        $this->bedrockEconomyAPI = BedrockEconomyAPI::legacy();
-    }
+	public function __construct()
+	{
+		$this->bedrockEconomyAPI = BedrockEconomyAPI::legacy();
+	}
 
-    /** @return void */
-    public function setCallable(callable $callable): void
-    {
-        $this->callable = $callable;
-    }
+	/** @return void */
+	public function setCallable(callable $callable) : void
+	{
+		$this->callable = $callable;
+	}
 
-    public function process(Player $player, int $amount): void
-    {
-        $this->bedrockEconomyAPI->subtractFromPlayerBalance(
-            $player->getName(),
-            $amount,
-            ClosureContext::create(
-                function (bool $wasUpdated): void {
-                    if($wasUpdated){
-                        $this->handle(EconomyEnchant::STATUS_SUCCESS);
-                    } else {
-                        $this->handle(EconomyEnchant::STATUS_ENOUGH);
-                    }
-                }
-            )
-        ); // Sorry for the carelessness, the money should have been reduced immediately
-    }
+	public function process(Player $player, int $amount) : void
+	{
+		$this->bedrockEconomyAPI->subtractFromPlayerBalance(
+			$player->getName(),
+			$amount,
+			ClosureContext::create(
+				function (bool $wasUpdated) : void {
+					if($wasUpdated){
+						$this->handle(EconomyEnchant::STATUS_SUCCESS);
+					} else {
+						$this->handle(EconomyEnchant::STATUS_ENOUGH);
+					}
+				}
+			)
+		); // Sorry for the carelessness, the money should have been reduced immediately
+	}
 
-    /** @param int $status */
-    public function handle(int $status): void
-    {
-        if (is_callable($this->callable)) {
-            $call = $this->callable;
-            $call($status);
-        }
-    }
+	/** @param int $status */
+	public function handle(int $status) : void
+	{
+		if (is_callable($this->callable)) {
+			$call = $this->callable;
+			$call($status);
+		}
+	}
 }

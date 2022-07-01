@@ -10,13 +10,17 @@ Commands | Default
 
 ## Feature
 - Support Multiple Economys
-- Support PiggyCustomEnchants
+- Support Multiple CustomEnchant
 - Support EnchantTable Direct
 - Auto Check Enchant Available in Hand
 - Blacklist System
 - Max Level Enchant
 - Customable Message
 - Customable Form
+
+## Supported Custom Enchant Plugin
+* [PiggyCustomEnchants](https://poggit.pmmp.io/p/PiggyCustomEnchants) by DaPigGuy
+* [VanillaEC](https://poggit.pmmp.io/p/VanillaEC/) By David-pm-pl
 
 ## Supported Economy Providers
 

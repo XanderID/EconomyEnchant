@@ -8,8 +8,9 @@ description: a EconomyEnchant Shop in UI
 softdepend:
  - EconomyAPI
  - BedrockEconomy
- - PiggyCustomEnchants
  - Capital
+ - PiggyCustomEnchants
+ - VanillaEC
 
 permissions:
  economyenchant.cmd:

@@ -1,12 +1,12 @@
 <?php
 
 /*
- *  __  __       _       _  ____                 _              __   _  _   
- * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |  
- * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_ 
+ *  __  __       _       _  ____                 _              __   _  _
+ * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |
+ * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_
  * | |  | | |_| | | (_| | | |_| | (_| | | | | | | | | | | (_| | (_) |__   _|
- * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|  
- *                    |_|                                |___/              
+ * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|
+ *                    |_|                                |___/
  *
  * Copyright (c) 2022 MulqiGaming64
  *
@@ -36,44 +36,45 @@ namespace MulqiGaming64\EconomyEnchant\Provider\Types;
 
 use MulqiGaming64\EconomyEnchant\EconomyEnchant;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
-use pocketmine\player\Player;
 use onebone\economyapi\EconomyAPI as EconomyAPIPL;
+use pocketmine\player\Player;
+use function is_callable;
 
 class EconomyAPI extends Provider
 {
-    /** @var EconomyAPIPL */
-    private $economyAPI;
+	/** @var EconomyAPIPL */
+	private $economyAPI;
 
-    /** @var callable $callable */
-    private $callable;
+	/** @var callable $callable */
+	private $callable;
 
-    public function __construct()
-    {
-        $this->economyAPI = EconomyAPIPL::getInstance();
-    }
+	public function __construct()
+	{
+		$this->economyAPI = EconomyAPIPL::getInstance();
+	}
 
-    /** @return void */
-    public function setCallable(callable $callable): void
-    {
-        $this->callable = $callable;
-    }
+	/** @return void */
+	public function setCallable(callable $callable) : void
+	{
+		$this->callable = $callable;
+	}
 
-    public function process(Player $player, int $amount): void
-    {
-        if ($this->economyAPI->myMoney($player) >= $amount) {
-            $this->handle(EconomyEnchant::STATUS_SUCCESS);
-            $this->economyAPI->reduceMoney($player, $amount);
-        } else {
-            $this->handle(EconomyEnchant::STATUS_ENOUGH);
-        }
-    }
+	public function process(Player $player, int $amount) : void
+	{
+		if ($this->economyAPI->myMoney($player) >= $amount) {
+			$this->handle(EconomyEnchant::STATUS_SUCCESS);
+			$this->economyAPI->reduceMoney($player, $amount);
+		} else {
+			$this->handle(EconomyEnchant::STATUS_ENOUGH);
+		}
+	}
 
-    /** @param int $status */
-    public function handle(int $status): void
-    {
-        if (is_callable($this->callable)) {
-            $call = $this->callable;
-            $call($status);
-        }
-    }
+	/** @param int $status */
+	public function handle(int $status) : void
+	{
+		if (is_callable($this->callable)) {
+			$call = $this->callable;
+			$call($status);
+		}
+	}
 }

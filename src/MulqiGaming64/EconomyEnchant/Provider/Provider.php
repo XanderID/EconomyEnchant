@@ -1,12 +1,12 @@
 <?php
 
 /*
- *  __  __       _       _  ____                 _              __   _  _   
- * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |  
- * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_ 
+ *  __  __       _       _  ____                 _              __   _  _
+ * |  \/  |_   _| | __ _(_)/ ___| __ _ _ __ ___ (_)_ __   __ _ / /_ | || |
+ * | |\/| | | | | |/ _` | | |  _ / _` | '_ ` _ \| | '_ \ / _` | '_ \| || |_
  * | |  | | |_| | | (_| | | |_| | (_| | | | | | | | | | | (_| | (_) |__   _|
- * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|  
- *                    |_|                                |___/              
+ * |_|  |_|\__,_|_|\__, |_|\____|\__,_|_| |_| |_|_|_| |_|\__, |\___/   |_|
+ *                    |_|                                |___/
  *
  * Copyright (c) 2022 MulqiGaming64
  *
@@ -34,22 +34,21 @@ declare(strict_types=1);
 
 namespace MulqiGaming64\EconomyEnchant\Provider;
 
-use MulqiGaming64\EconomyEnchant\EconomyEnchant;
 use pocketmine\player\Player;
 
 abstract class Provider
 {
-    public function __construct()
-    {
-        // I'm alone here :(
-    }
+	public function __construct()
+	{
+		// I'm alone here :(
+	}
 
-    /** @param callable $callable */
-    abstract public function setCallable(callable $callable): void;
+	/** @param callable $callable */
+	abstract public function setCallable(callable $callable) : void;
 
-    /** @param Player $player */
-    abstract public function process(Player $player, int $amount): void;
+	/** @param Player $player */
+	abstract public function process(Player $player, int $amount) : void;
 
-    /** @param int $status */
-    abstract public function handle(int $status): void;
+	/** @param int $status */
+	abstract public function handle(int $status) : void;
 }
