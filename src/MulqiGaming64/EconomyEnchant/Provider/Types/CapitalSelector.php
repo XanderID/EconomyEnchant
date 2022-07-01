@@ -35,46 +35,23 @@ declare(strict_types=1);
 namespace MulqiGaming64\EconomyEnchant\Provider\Types;
 
 use MulqiGaming64\EconomyEnchant\EconomyEnchant;
-use MulqiGaming64\EconomyEnchant\Provider\Provider;
-use onebone\economyapi\EconomyAPI as EconomyAPIPL;
-use pocketmine\player\Player;
-use function is_callable;
+use SOFe\Capital\Capital as CapitalPL;
 
-class EconomyAPI extends Provider
+class CapitalSelector
 {
-	/** @var EconomyAPIPL */
-	private $economyAPI;
+	const CAPITAL_VERSION = "0.1.0";
 
-	/** @var callable $callable */
-	private $callable;
+	private $selector;
 
 	public function __construct()
 	{
-		$this->economyAPI = EconomyAPIPL::getInstance();
+		$selector = EconomyEnchant::getInstance()->getSelector(); // Load Selector from Config
+		CapitalPL::api(self::CAPITAL_VERSION, function(CapitalPL $api) use($selector){
+		  $this->selector = $api->completeConfig($selector);
+		});
 	}
 
-	/** @return void */
-	public function setCallable(callable $callable) : void
-	{
-		$this->callable = $callable;
-	}
-
-	public function process(Player $player, int $amount, string $enchantName) : void
-	{
-		if ($this->economyAPI->myMoney($player) >= $amount) {
-			$this->handle(EconomyEnchant::STATUS_SUCCESS);
-			$this->economyAPI->reduceMoney($player, $amount);
-		} else {
-			$this->handle(EconomyEnchant::STATUS_ENOUGH);
-		}
-	}
-
-	/** @param int $status */
-	public function handle(int $status) : void
-	{
-		if (is_callable($this->callable)) {
-			$call = $this->callable;
-			$call($status);
-		}
+	public function getSelector(){
+		return $this->selector;
 	}
 }

@@ -6,6 +6,10 @@ economy: "Auto"
 # Selector for Capital Economys
 selector: []
 
+# Label for Capital Economys
+# use tag {name} For name Player, {price} For price Enchantment, {enchant} for Enchant Name
+label-capital: "{name} has buyed {enchant} with price {price}"
+
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
 

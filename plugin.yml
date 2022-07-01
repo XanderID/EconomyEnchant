@@ -9,8 +9,8 @@ softdepend:
  - EconomyAPI
  - BedrockEconomy
  - Capital
- - VanillaEC
  - PiggyCustomEnchants
+ - VanillaEC
 
 permissions:
  economyenchant.cmd:

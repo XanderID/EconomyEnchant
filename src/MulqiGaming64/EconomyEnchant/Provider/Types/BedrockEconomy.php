@@ -62,7 +62,7 @@ class BedrockEconomy extends Provider
 		$this->callable = $callable;
 	}
 
-	public function process(Player $player, int $amount) : void
+	public function process(Player $player, int $amount, string $enchantName) : void
 	{
 		$this->bedrockEconomyAPI->subtractFromPlayerBalance(
 			$player->getName(),

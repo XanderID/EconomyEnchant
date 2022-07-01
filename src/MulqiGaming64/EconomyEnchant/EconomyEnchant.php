@@ -48,6 +48,7 @@ use MulqiGaming64\EconomyEnchant\Provider\Provider;
 
 use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
 use MulqiGaming64\EconomyEnchant\Provider\Types\Capital;
+use MulqiGaming64\EconomyEnchant\Provider\Types\CapitalSelector;
 use MulqiGaming64\EconomyEnchant\Provider\Types\EconomyAPI;
 
 use pocketmine\block\EnchantingTable;
@@ -79,6 +80,8 @@ use pocketmine\item\Shovel;
 use pocketmine\item\Sword;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
+use function array_keys;
+use function array_values;
 use function class_exists;
 use function end;
 use function explode;
@@ -112,8 +115,11 @@ class EconomyEnchant extends PluginBase implements Listener
 	/** @var bool $vanillaEC */
 	private $vanillaEC = false;
 
-	/** @var Provider $provider */
-	private $provider = null;
+	/** @var CapitalSelector $capitalSelector */
+	private $capitalSelector;
+
+	/** @var string $provider */
+	private $provider;
 
 	protected function onLoad() : void {
 		self::$instance = $this; // Preparing Instance
@@ -125,7 +131,12 @@ class EconomyEnchant extends PluginBase implements Listener
 
 		$economy = $this->getEconomyType();
 		if($economy !== null){
-			$this->registerProvider($economy);
+			$this->provider = $economy;
+
+			// Register Selector for capital Economy
+			if($economy == "Capital"){
+				$this->capitalSelector = new CapitalSelector();
+			}
 
 		   // Checking softdepend
 		   if (class_exists(PiggyCustomEnchants::class)) {
@@ -236,9 +247,26 @@ class EconomyEnchant extends PluginBase implements Listener
 		return self::$instance;
 	}
 
+	public function getCapitalSelector(){
+		return $this->capitalSelector->getSelector();
+	}
+
 	public function getSelector() : array
 	{
 		return $this->getConfig()->get("selector");
+	}
+
+	public function getLabel(string $name, int $amount, string $enchant) : string
+	{
+		$label = $this->getConfig()->get("label-capital");
+
+		$change = [
+			"{name}" => $name,
+			"{price}" => $amount,
+			"{enchant}" => $enchant
+		];
+
+		return str_replace(array_keys($change), array_values($change), $label);
 	}
 
 	/**
@@ -603,7 +631,7 @@ class EconomyEnchant extends PluginBase implements Listener
 				return true;
 			});
 			// Process Transaction
-			$provider->process($player, $price);
+			$provider->process($player, $price, $display);
 			return true;
 		});
 		$form->setTitle($this->getForm("submit", "title"));
@@ -642,23 +670,17 @@ class EconomyEnchant extends PluginBase implements Listener
 		$player->getInventory()->setItemInHand($item); // Send back item to Player
 	}
 
-	/** @return void */
-	private function registerProvider(string $provider) : void
+	/** @return Provider */
+	private function getProvider() : Provider
 	{
-		if ($provider == "EconomyAPI") {
+		if ($this->provider == "EconomyAPI") {
 			$call = new EconomyAPI();
-		} elseif ($provider == "BedrockEconomy") {
+		} elseif ($this->provider == "BedrockEconomy") {
 			$call = new BedrockEconomy();
-		} elseif ($provider == "Capital") {
-			$call = new Capital();
+		} elseif ($this->provider == "Capital") {
+			$call = new Capital($this->getCapitalSelector());
 		}
 
-		$this->provider = $call;
-	}
-
-	/** @return Provider */
-	public function getProvider() : Provider
-	{
-		return $this->provider;
+		return $call;
 	}
 }
