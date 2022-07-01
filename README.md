@@ -28,10 +28,6 @@ Commands | Default
 * [BedrockEconomy](https://poggit.pmmp.io/p/BedrockEconomy) by cooldogedev
 * [Capital](https://poggit.pmmp.io/p/Capital/) By SOF3
 
-
-# To-Dos
-- Add more detail transaction on Capital Label
-
 # Config
 
 ``` YAML
