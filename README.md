@@ -14,7 +14,6 @@ Commands | Default
 - Support EnchantTable Direct
 - Auto Check Enchant Available in Hand
 - Blacklist System
-- Max Level Enchant
 - Customable Message
 - Customable Form
 
