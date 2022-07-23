@@ -1,6 +1,10 @@
 ---
+# Please don't edit this, only for internal use
+config-version: 1
+
 # Your Economy plugin name
-# Available: BedrockEconomy, EconomyAPI, Capital, Auto
+# Available: BedrockEconomy, EconomyAPI, Capital, XP, Auto
+# If you select auto but there is no Economy Plugin it will automatically use XP
 economy: "Auto"
 
 # Selector for Capital Economys
@@ -12,6 +16,9 @@ label-capital: "{name} has buyed {enchant} with price {price}"
 
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
+
+# Add Anvil Sound to Player if Enchant is Successful
+sound: true
 
 # Form
 form:

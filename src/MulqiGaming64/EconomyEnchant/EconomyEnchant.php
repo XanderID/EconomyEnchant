@@ -12,15 +12,19 @@ use DaPigGuy\PiggyCustomEnchants\utils\Utils as PiggyUtils;
 use DavidGlitch04\VanillaEC\Main as VanillaEC;
 
 use MulqiGaming64\EconomyEnchant\Commands\EconomyEnchantCommands;
+use MulqiGaming64\EconomyEnchant\libs\JackMD\ConfigUpdater\ConfigUpdater;
+use MulqiGaming64\EconomyEnchant\libs\JackMD\UpdateNotifier\UpdateNotifier;
 use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\CustomForm;
 use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\SimpleForm;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
 
 use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
+use MulqiGaming64\EconomyEnchant\Provider\Types\XP;
 use MulqiGaming64\EconomyEnchant\Provider\Types\Capital;
 use MulqiGaming64\EconomyEnchant\Provider\Types\CapitalSelector;
 use MulqiGaming64\EconomyEnchant\Provider\Types\EconomyAPI;
 
+use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\block\EnchantingTable;
 use pocketmine\data\bedrock\EnchantmentIdMap;
 
@@ -63,11 +67,15 @@ use function ucfirst;
 
 class EconomyEnchant extends PluginBase implements Listener
 {
+	/** XP Provider does not need to be included here because it is not a Plugin */
 	public const availableEconomy = ["BedrockEconomy", "Capital", "EconomyAPI"];
 
 	/** All status Provider */
 	public const STATUS_SUCCESS = 0;
 	public const STATUS_ENOUGH = 1;
+	
+	/** Config Version */
+	private const CONFIG_VERSION = 1;
 
 	/** @return EconomyEnchant */
 	private static EconomyEnchant $instance;
@@ -98,6 +106,12 @@ class EconomyEnchant extends PluginBase implements Listener
 	public function onEnable() : void
 	{
 		$this->saveDefaultConfig();
+		
+		// Checking New version
+		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
+		
+		// Checking Config version
+		if(ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION)) $this->reloadConfig();
 
 		$economy = $this->getEconomyType();
 		if($economy !== null){
@@ -158,6 +172,9 @@ class EconomyEnchant extends PluginBase implements Listener
 				}
 				$economy = "EconomyAPI";
 			break;
+			case "xp":
+				$economy = "XP";
+			break;
 			case "auto":
 				$found = false;
 				foreach (self::availableEconomy as $eco) {
@@ -168,9 +185,8 @@ class EconomyEnchant extends PluginBase implements Listener
 					}
 				}
 				if (!$found) {
-					$this->getLogger()->alert("all economy plugins could not be found, Disabling Plugin!");
-					$plugin->disablePlugin($this);
-					return null;
+					$this->getLogger()->alert("all economy plugins could not be found, Using XP as an alternative!");
+					$economy = "XP";
 				}
 			break;
 			default:
@@ -184,9 +200,8 @@ class EconomyEnchant extends PluginBase implements Listener
 					}
 				}
 				if (!$found) {
-					$plugin->disablePlugin($this);
-					$this->getLogger()->alert("all economy plugins could not be found, Disabling Plugin!");
-					return null;
+					$this->getLogger()->alert("all economy plugins could not be found, Using XP as an alternative!");
+					$economy = "XP";
 				}
 			break;
 		}
@@ -594,6 +609,8 @@ class EconomyEnchant extends PluginBase implements Listener
 					);
 					$player->sendMessage($msg);
 					$this->enchantItem($player, $enchant["enchant"], $reqlevel);
+					
+					$this->sendSound($player);
 				} else {
 					$msg = str_replace("{need}", "" . $price, $this->getMessage("enough"));
 					$player->sendMessage($msg);
@@ -613,6 +630,27 @@ class EconomyEnchant extends PluginBase implements Listener
 		}
 		$player->sendForm($form);
 		return true;
+	}
+	
+	/**
+	* @var Player $player
+	*/
+	public function sendSound(Player $player): void
+	{
+		// Checking if Sound play is true
+		if(!$this->getConfig()->get("sound")) return;
+		
+		$pos = $player->getPosition();
+		
+		$packet = new PlaySoundPacket();
+        $packet->soundName = "random.anvil_use";
+        $packet->x = $pos->getFloorX();
+    	$packet->y = $pos->getFloorY();
+    	$packet->z = $pos->getFloorZ();
+        $packet->volume = 1.0;
+    	$packet->pitch = 1.0;
+    
+    	$player->getNetworkSession()->sendDataPacket($packet);
 	}
 
 	/** @return string */
@@ -649,6 +687,8 @@ class EconomyEnchant extends PluginBase implements Listener
 			$call = new BedrockEconomy();
 		} elseif ($this->provider == "Capital") {
 			$call = new Capital($this->getCapitalSelector());
+		} elseif ($this->provider == "XP") {
+			$call = new XP();
 		}
 
 		return $call;
