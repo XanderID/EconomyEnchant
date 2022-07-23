@@ -10,9 +10,12 @@ economy: "Auto"
 # Selector for Capital Economys
 selector: []
 
-# Label for Capital Economys
-# use tag {name} For name Player, {price} For price Enchantment, {enchant} for Enchant Name
-label-capital: "{name} has buyed {enchant} with price {price}"
+# Transaction label for Capital Economys
+# In addition to these labels, there is also an `enchant` label
+# which specifies which enchantment is bought.
+capital-labels:
+  plugin: EconomyEnchant
+  reason: buyEnchant
 
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
