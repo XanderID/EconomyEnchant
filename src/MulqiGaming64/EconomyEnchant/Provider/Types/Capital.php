@@ -19,7 +19,7 @@ class Capital extends Provider
 	/** @var callable $callable */
 	private $callable;
 
-	private $selector;
+	private CapitalSelector $selector;
 
 	public function __construct($selector)
 	{
@@ -39,9 +39,9 @@ class Capital extends Provider
 				yield from $api->takeMoney(
 					"EconomyEnchant",
 					$player,
-					$this->selector,
+					$this->selector->getSelector(),
 					$amount,
-					new LabelSet(["reason" => EconomyEnchant::getInstance()->getLabel($player->getName(), $amount, $enchantName)]),
+					new LabelSet(EconomyEnchant::getInstance()->getLabels($enchantName)),
 				);
 				$this->handle(EconomyEnchant::STATUS_SUCCESS);
 			} catch(CapitalException $error) {

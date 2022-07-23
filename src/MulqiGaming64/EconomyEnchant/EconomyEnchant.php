@@ -232,8 +232,9 @@ class EconomyEnchant extends PluginBase implements Listener
 		return self::$instance;
 	}
 
-	public function getCapitalSelector(){
-		return $this->capitalSelector->getSelector();
+	public function getCapitalSelector() : CapitalSelector
+	{
+		return $this->capitalSelector;
 	}
 
 	public function getSelector() : array
@@ -241,17 +242,13 @@ class EconomyEnchant extends PluginBase implements Listener
 		return $this->getConfig()->get("selector");
 	}
 
-	public function getLabel(string $name, int $amount, string $enchant) : string
+	public function getLabels(string $enchant) : array
 	{
-		$label = $this->getConfig()->get("label-capital");
-
-		$change = [
-			"{name}" => $name,
-			"{price}" => $amount,
-			"{enchant}" => $enchant
-		];
-
-		return str_replace(array_keys($change), array_values($change), $label);
+		return $this->getConfig()->get("capital-labels", [
+			"plugin" => "EconomyEnchant",
+			"reason" => "buyEnchant",
+			"enchant" => $enchant,
+		]);
 	}
 
 	/**
