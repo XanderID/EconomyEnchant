@@ -12,10 +12,11 @@ use DaPigGuy\PiggyCustomEnchants\utils\Utils as PiggyUtils;
 use DavidGlitch04\VanillaEC\Main as VanillaEC;
 
 use MulqiGaming64\EconomyEnchant\Commands\EconomyEnchantCommands;
-use MulqiGaming64\EconomyEnchant\libs\JackMD\ConfigUpdater\ConfigUpdater;
-use MulqiGaming64\EconomyEnchant\libs\JackMD\UpdateNotifier\UpdateNotifier;
-use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\CustomForm;
-use MulqiGaming64\EconomyEnchant\libs\Vecnavium\FormsUI\SimpleForm;
+use JackMD\ConfigUpdater\ConfigUpdater;
+use JackMD\UpdateNotifier\UpdateNotifier;
+use Vecnavium\FormsUI\FormsUI;
+use Vecnavium\FormsUI\CustomForm;
+use Vecnavium\FormsUI\SimpleForm;
 use MulqiGaming64\EconomyEnchant\Provider\Provider;
 
 use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
@@ -106,6 +107,30 @@ class EconomyEnchant extends PluginBase implements Listener
 	public function onEnable() : void
 	{
 		$this->saveDefaultConfig();
+		
+		/** Checking available Virion */
+		$virion = [
+			"ConfigUpdater" => ConfigUpdater::class,
+			"UpdateNotifier" => UpdateNotifier::class,
+			"FormsUI" => FormsUI::class
+		];
+		
+		// for log to Console
+		$notInstalled = [];
+		foreach($virion as $name => $class){
+			if(!class_exists($class)){
+				$notInstalled[] = $name;
+			}
+		}
+		
+		if(!empty($notInstalled)){
+			$log = implode(", ", $notInstalled);
+			$this->getLogger()->warning("Virion: " . $log . " not installed please install or Download EconomyEnchant from Poggit CI, Disabling Plugin!");
+			
+			// Disable Plugin
+			$this->getServer()->getPluginManager()->disablePlugin($this);
+			return;
+		}
 		
 		// Checking New version
 		UpdateNotifier::checkUpdate($this->getDescription()->getName(), $this->getDescription()->getVersion());
