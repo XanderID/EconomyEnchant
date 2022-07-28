@@ -13,5 +13,8 @@ projects:
         version: ^3.0.0
       - src: ifera-mc/ConfigUpdater/ConfigUpdater
         version: ^2.0.0
+      - src: muqsit/InvMenu/InvMenu
+        branch: 4.0
+        version: ^4.4.1
     lint: false
 ...
