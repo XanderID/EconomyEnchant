@@ -9,13 +9,45 @@ Commands | Default
 `/eshop` | True
 
 ## Feature
-- Support Multiple Economys
-- Support Multiple CustomEnchant
-- Support EnchantTable Direct
-- Auto Check Enchant Available in Hand
-- Blacklist System
-- Customable Message
-- Customable Form
+* Support Multiple Economys
+* Support Multiple CustomEnchant
+* Support EnchantTable Direct
+* Support Sound When Enchant Success
+* Auto Check Enchant Available in Hand
+* Blacklist System
+* Customable Message
+* Customable Form (GUI / UI)
+* Form
+  - Configurable Form
+  - Slide for Level
+* GUI
+  - Configurable GUI
+  - If the enchant exceeds 26 Will be Divided into Pages
+  - Confirmation GUI
+
+## How to Registering Enchantment
+Do you want to register your enchant Into this EnchantShop, Please follow this [Wiki](https://github.com/MulqiGaming64/EconomyEnchant/wiki/Registering-Enchantment)
+
+## API
+First Import Class MulqiGaming64\EconomyEnchant\Manager\EnchantManager</br>
+- Getting Item Flags
+  * EnchantManager::getItemFlags(/** Items you want */);
+- Checking if Enchant Blacklisted
+  * EnchantManager::isEnchantBlacklisted(/** Name the enchantment with Lower */);
+- Checking if Enchant blacklisted in Item
+  * EnchantManager::isItemBlacklisted(/** The Item */, /** Name Enchantment with Lower */);
+
+## Screenshot
+* Form ( UI )
+  - Selecting Form
+    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/Form1.jpg)
+  - Confirmation Form
+    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/Form2.jpg)
+* InvMenu ( GUI )
+  - Selecting GUI ( Page )
+    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/GUI1.jpg)
+  - Confirmation GUI
+    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/GUI2.jpg)
 
 ## Supported Custom Enchant Plugin
 * [PiggyCustomEnchants](https://poggit.pmmp.io/p/PiggyCustomEnchants) by DaPigGuy
@@ -33,7 +65,7 @@ Commands | Default
 
 ---
 # Please don't edit this, only for internal use
-config-version: 1
+config-version: 2
 
 # Your Economy plugin name
 # Available: BedrockEconomy, EconomyAPI, Capital, XP, Auto
@@ -43,18 +75,15 @@ economy: "Auto"
 # Selector for Capital Economys
 selector: []
 
-# Transaction label for Capital Economys
-# In addition to these labels, there is also an `enchant` label
-# which specifies which enchantment is bought.
-capital-labels:
-  plugin: EconomyEnchant
-  reason: buyEnchant
-
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
 
 # Add Anvil Sound to Player if Enchant is Successful
 sound: true
+
+# Form Type
+# Can use UI or GUI
+form-type: "UI"
 
 # Form
 form:
@@ -64,7 +93,6 @@ form:
   title: "EnchantShop"
   # Content for BuyShop
   content: "Select Enchantment:"
-  # Button Style
   # Tag: {price} Price Enchantment, {enchant} Name Of Enchantment
   button:
    # Only can 0-1
@@ -72,7 +100,7 @@ form:
    1: "{price}"
  # Submit Menu
  submit:
-  # Title for BuyShop
+  # Title for SubmitMenu
   title: "EnchantShop"
   # Content
   # Tag: {price} Price of Enchantment
@@ -81,6 +109,42 @@ form:
   max-content: "§aYour item has reached the level limit!"
   # Slider Content
   slider: "Level"
+
+# GUI
+gui:
+ # Buy Menu
+ buy-shop:
+  # Title for BuyShop
+  title: "EnchantShop"
+  # Tag: {level} Level Enchantment, {enchant} Name Of Enchantment
+  name: "§f{enchant} §b{level}"
+  # Tag: {price} Price Enchantment
+  # if you want to empty lore just put value []
+  lore:
+   - "Price for This Enchant {price}"
+ # Submit Menu
+ submit:
+  # Title for SubmitMenu
+  title: "EnchantShop"
+  # Buy Item
+  buy:
+   # Buy Item Name
+   # Tag: {level} Level Enchantment, {enchant} Name Of Enchantment
+   name: "Buy §f{enchant} §b{level}"
+   # Buy Item Lore
+   # Tag: {price} Price Enchantment
+   # if you want to empty lore just put value []
+   lore:
+    - "Are you sure to buy"
+    - "This Enchant With price {price}"
+   # Cancel Item
+  cancel:
+   # Cancel Item Name
+   name: "§cCancel"
+   # Cancel Item Lore
+   # if you want to empty lore just put value []
+   lore:
+    - "Cancel buying Enchantment"
 
 # Message
 message:

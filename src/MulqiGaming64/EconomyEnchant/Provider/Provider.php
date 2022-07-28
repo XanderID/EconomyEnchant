@@ -13,12 +13,6 @@ abstract class Provider
 		// I'm alone here :(
 	}
 
-	/** @param callable $callable */
-	abstract public function setCallable(callable $callable) : void;
-
 	/** @param Player $player */
-	abstract public function process(Player $player, int $amount, string $enchantName) : void;
-
-	/** @param int $status */
-	abstract public function handle(int $status) : void;
+	abstract public function process(Player $player, int $amount, string $enchantName, callable $callable) : void;
 }
