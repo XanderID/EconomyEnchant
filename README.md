@@ -58,6 +58,7 @@ First Import Class MulqiGaming64\EconomyEnchant\Manager\EnchantManager</br>
 * [EconomyAPI](https://poggit.pmmp.io/p/EconomyAPI) by onebone/poggit-orphanage
 * [BedrockEconomy](https://poggit.pmmp.io/p/BedrockEconomy) by cooldogedev
 * [Capital](https://poggit.pmmp.io/p/Capital/) By SOF3
+* [XP](https://github.com/pmmp/PocketMine-MP) By PocketMine-MP
 
 # Config
 
