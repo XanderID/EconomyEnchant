@@ -13,6 +13,7 @@ use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\item\ItemFactory;
 use pocketmine\item\VanillaItems;
 use pocketmine\nbt\tag\CompoundTag;
@@ -123,7 +124,7 @@ class GUI
 		  $item = $transaction->getItemClicked();
 
 		  // Identify Item Paper
-		  if($item->getId() == 339){
+		  if($item->getId() == ItemIds::PAPER){
 			$provider = EconomyEnchant::getInstance()->getProvider();
 				$provider->process($player, $price, $display, function (int $status) use ($player, $enchant, $display, $price, $nextlevel) {
 					if ($status == EconomyEnchant::STATUS_SUCCESS) {
@@ -170,7 +171,7 @@ class GUI
 		foreach($splited as $index => $splist){
 			foreach($splist as $encdata){
 				// Why using ItemFactory because in VanillaItems no Enchanted Book
-				$itemBook = ItemFactory::getInstance()->get(403, 0, 1);
+				$itemBook = ItemFactory::getInstance()->get(ItemIds::ENCHANTED_BOOK, 0, 1);
 
 				// Getting next Level
 				$nowlevel = (int) $item->hasEnchantment($encdata["enchant"]) ? $item->getEnchantmentLevel($encdata["enchant"]) : 0;
