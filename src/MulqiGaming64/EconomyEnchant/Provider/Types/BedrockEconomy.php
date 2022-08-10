@@ -17,7 +17,7 @@ class BedrockEconomy extends Provider
 	/** @var LegacyBEAPI $bedrockEconomyAPI */
 	private $bedrockEconomyAPI;
 
-	public function __construct(callable $callable)
+	public function __construct()
 	{
 		$this->bedrockEconomyAPI = BedrockEconomyAPI::legacy();
 	}
