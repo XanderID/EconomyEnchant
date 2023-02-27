@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MulqiGaming64\EconomyEnchant\Provider;
+namespace XanderID\EconomyEnchant\Provider;
 
 use pocketmine\player\Player;
 

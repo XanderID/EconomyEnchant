@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MulqiGaming64\EconomyEnchant\Manager\Enchantment;
+namespace XanderID\EconomyEnchant\Manager\Enchantment;
 
 use DaPigGuy\PiggyCustomEnchants\utils\Utils;
 

@@ -26,10 +26,10 @@ Commands | Default
   - Confirmation GUI
 
 ## How to Registering Enchantment
-Do you want to register your enchant Into this EnchantShop, Please follow this [Wiki](https://github.com/MulqiGaming64/EconomyEnchant/wiki/Registering-Enchantment)
+Do you want to register your enchant Into this EnchantShop, Please follow this [Wiki](https://github.com/XanderID/EconomyEnchant/wiki/Registering-Enchantment)
 
 ## API
-First Import Class MulqiGaming64\EconomyEnchant\Manager\EnchantManager</br>
+First Import Class XanderID\EconomyEnchant\Manager\EnchantManager</br>
 - Getting Item Flags
   * EnchantManager::getItemFlags(/** Items you want */);
 - Checking if Enchant Blacklisted
@@ -40,14 +40,14 @@ First Import Class MulqiGaming64\EconomyEnchant\Manager\EnchantManager</br>
 ## Screenshot
 * Form ( UI )
   - Selecting Form
-    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/Form1.jpg)
+    ![Screenshot](https://github.com/XanderID/EconomyEnchant/blob/main/.screenshot/Form1.jpg)
   - Confirmation Form
-    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/Form2.jpg)
+    ![Screenshot](https://github.com/XanderID/EconomyEnchant/blob/main/.screenshot/Form2.jpg)
 * InvMenu ( GUI )
   - Selecting GUI ( Page )
-    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/GUI1.jpg)
+    ![Screenshot](https://github.com/XanderID/EconomyEnchant/blob/main/.screenshot/GUI1.jpg)
   - Confirmation GUI
-    ![Screenshot](https://github.com/MulqiGaming64/EconomyEnchant/blob/main/.screenshot/GUI2.jpg)
+    ![Screenshot](https://github.com/XanderID/EconomyEnchant/blob/main/.screenshot/GUI2.jpg)
 
 ## Supported Custom Enchant Plugin
 * [PiggyCustomEnchants](https://poggit.pmmp.io/p/PiggyCustomEnchants) by DaPigGuy
@@ -197,4 +197,4 @@ blacklist-item: []
 
 # Additional Notes
 
-- If you find bugs or want to give suggestions, please visit [here](https://github.com/MulqiGaming64/EconomyEnchant/issues)
+- If you find bugs or want to give suggestions, please visit [here](https://github.com/XanderID/EconomyEnchant/issues)

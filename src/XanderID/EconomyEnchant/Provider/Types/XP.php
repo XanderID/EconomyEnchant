@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MulqiGaming64\EconomyEnchant\Provider\Types;
+namespace XanderID\EconomyEnchant\Provider\Types;
 
-use MulqiGaming64\EconomyEnchant\EconomyEnchant;
-use MulqiGaming64\EconomyEnchant\Provider\Provider;
+use XanderID\EconomyEnchant\EconomyEnchant;
+use XanderID\EconomyEnchant\Provider\Provider;
 use pocketmine\player\Player;
 
 class XP extends Provider

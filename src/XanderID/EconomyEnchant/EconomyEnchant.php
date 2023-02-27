@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MulqiGaming64\EconomyEnchant;
+namespace XanderID\EconomyEnchant;
 
 use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
 use DaPigGuy\PiggyCustomEnchants\PiggyCustomEnchants;
@@ -12,17 +12,17 @@ use JackMD\ConfigUpdater\ConfigUpdater;
 
 use JackMD\UpdateNotifier\UpdateNotifier;
 
-use MulqiGaming64\EconomyEnchant\Commands\EconomyEnchantCommands;
-use MulqiGaming64\EconomyEnchant\Manager\EnchantManager;
-use MulqiGaming64\EconomyEnchant\Manager\Enchantment\PiggyCustomEnchant;
-use MulqiGaming64\EconomyEnchant\Manager\Enchantment\VanillaEnchant;
-use MulqiGaming64\EconomyEnchant\Provider\Provider;
-use MulqiGaming64\EconomyEnchant\Provider\Types\BedrockEconomy;
-use MulqiGaming64\EconomyEnchant\Provider\Types\Capital;
-use MulqiGaming64\EconomyEnchant\Provider\Types\EconomyAPI;
-use MulqiGaming64\EconomyEnchant\Provider\Types\XP;
-use MulqiGaming64\EconomyEnchant\Transaction\Shop\GUI;
-use MulqiGaming64\EconomyEnchant\Transaction\Shop\UI;
+use XanderID\EconomyEnchant\Commands\EconomyEnchantCommands;
+use XanderID\EconomyEnchant\Manager\EnchantManager;
+use XanderID\EconomyEnchant\Manager\Enchantment\PiggyCustomEnchant;
+use XanderID\EconomyEnchant\Manager\Enchantment\VanillaEnchant;
+use XanderID\EconomyEnchant\Provider\Provider;
+use XanderID\EconomyEnchant\Provider\Types\BedrockEconomy;
+use XanderID\EconomyEnchant\Provider\Types\Capital;
+use XanderID\EconomyEnchant\Provider\Types\EconomyAPI;
+use XanderID\EconomyEnchant\Provider\Types\XP;
+use XanderID\EconomyEnchant\Transaction\Shop\GUI;
+use XanderID\EconomyEnchant\Transaction\Shop\UI;
 use muqsit\invmenu\InvMenu;
 
 use muqsit\invmenu\InvMenuHandler;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MulqiGaming64\EconomyEnchant\Transaction\Shop;
+namespace XanderID\EconomyEnchant\Transaction\Shop;
 
-use MulqiGaming64\EconomyEnchant\EconomyEnchant;
-use MulqiGaming64\EconomyEnchant\Manager\EnchantManager;
+use XanderID\EconomyEnchant\EconomyEnchant;
+use XanderID\EconomyEnchant\Manager\EnchantManager;
 use muqsit\invmenu\InvMenu;
 
 use muqsit\invmenu\InvMenuHandler;
