@@ -6,5 +6,5 @@ namespace XanderID\EconomyEnchant\Transaction;
 
 class Transaction
 {
-	// Todo for Transaction Event
+    // Todo for Transaction Event
 }

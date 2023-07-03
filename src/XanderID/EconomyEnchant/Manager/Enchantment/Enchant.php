@@ -9,11 +9,10 @@ use pocketmine\item\Item;
 
 abstract class Enchant
 {
+    abstract public function __construct();
 
-	abstract public function __construct();
-
-	/**
-	 * $enchant is Enchantment
-	 */
-	abstract public function isCompatibleWith($enchant, Item $item) : bool;
+    /**
+     * $enchant is Enchantment
+     */
+    abstract public function isCompatibleWith($enchant, Item $item): bool;
 }

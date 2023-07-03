@@ -1,6 +1,6 @@
 # General
 
-EconomyEnchant Shop For Pocketmine 4.0.0, With Many features
+EconomyEnchant Shop For Pocketmine 5.0.0, With Many features
 
 ## Commands
 
@@ -50,14 +50,11 @@ First Import Class XanderID\EconomyEnchant\Manager\EnchantManager</br>
     ![Screenshot](https://github.com/XanderID/EconomyEnchant/blob/main/.screenshot/GUI2.jpg)
 
 ## Supported Custom Enchant Plugin
-* [PiggyCustomEnchants](https://poggit.pmmp.io/p/PiggyCustomEnchants) by DaPigGuy
 * [VanillaEC](https://poggit.pmmp.io/p/VanillaEC/) By David-pm-pl
 
 ## Supported Economy Providers
 
-* [EconomyAPI](https://poggit.pmmp.io/p/EconomyAPI) by onebone/poggit-orphanage
 * [BedrockEconomy](https://poggit.pmmp.io/p/BedrockEconomy) by cooldogedev
-* [Capital](https://poggit.pmmp.io/p/Capital/) By SOF3
 * [XP](https://github.com/pmmp/PocketMine-MP) By PocketMine-MP
 
 # Config
@@ -66,15 +63,12 @@ First Import Class XanderID\EconomyEnchant\Manager\EnchantManager</br>
 
 ---
 # Please don't edit this, only for internal use
-config-version: 2
+config-version: 3
 
 # Your Economy plugin name
-# Available: BedrockEconomy, EconomyAPI, Capital, XP, Auto
+# Available: BedrockEconomy, XP, Auto
 # If you select auto but there is no Economy Plugin it will automatically use XP
 economy: "Auto"
-
-# Selector for Capital Economys
-selector: []
 
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
@@ -189,11 +183,16 @@ blacklist: []
 # example: 
 # blacklist:
 #  sharpness: ["diamond_sword"]
-# If you want add meta just item_name:meta
 blacklist-item: []
 ...
 
 ```
+
+# What's New
+-  Remove Support Capital, EconomyAPI and PiggyCE until they update
+- Fix Remaining GUI Page
+- Fix wrong price in the GUI Page
+- Update To New PocketMine-MP 5.0.0
 
 # Additional Notes
 

@@ -6,7 +6,7 @@ namespace XanderID\EconomyEnchant\Manager;
 
 use XanderID\EconomyEnchant\EconomyEnchant;
 use XanderID\EconomyEnchant\Manager\Enchantment\Enchant;
-use pocketmine\data\bedrock\LegacyItemIdToStringIdMap;
+use pocketmine\item\StringToItemParser;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 
@@ -27,6 +27,7 @@ use pocketmine\item\Sword;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 
 use pocketmine\player\Player;
+
 use function array_map;
 use function in_array;
 use function is_a;
@@ -34,162 +35,159 @@ use function str_replace;
 
 class EnchantManager
 {
+    /** @var array $enchant */
+    private static $enchant = [];
 
-	/** @var array $enchant */
-	private static $enchant = [];
+    public static function getAll(): array
+    {
+        return self::$enchant;
+    }
 
-	public static function getAll() : array{
-		return self::$enchant;
-	}
+    /**
+     * @phpstan-param class-string<Enchant> $compatible
+     */
+    public static function register(string $nameId, string $displayName, int $price, Enchantment $enchant, $compatible): void
+    {
+        if(!is_a($compatible, Enchant::class, true)) {
+            throw new \RuntimeException("Compatible class must be Extends to \XanderID\EconomyEnchant\Manager\Enchantment\Enchant");
+        }
 
-	/**
-	 * @phpstan-param class-string<Enchant> $compatible
-	 */
-	public static function register(string $nameId, string $displayName, int $price, Enchantment $enchant, $compatible) : void{
-		if(!is_a($compatible, Enchant::class, true)){
-			throw new \RuntimeException("Compatible class must be Extends to \XanderID\EconomyEnchant\Manager\Enchantment\Enchant");
-		}
+        self::$enchant[$displayName] = ["name" => $nameId, "price" => $price, "enchant" => $enchant, "compatible" => $compatible];
+    }
 
-		self::$enchant[$displayName] = ["name" => $nameId, "price" => $price, "enchant" => $enchant, "compatible" => $compatible];
-	}
+    public static function unregister(string $nameId): bool
+    {
+        foreach(self::$enchant as $display => $value) {
+            if($value["name"] == $nameId) {
+                unset(self::$enchant[$display]);
+                return true;
+            }
+        }
 
-	public static function unregister(string $nameId) : bool{
-		foreach(self::$enchant as $display => $value){
-			if($value["name"] == $nameId){
-				unset(self::$enchant[$display]);
-				return true;
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public static function getPriceInConfig(string $nameId): ?int
+    {
+        $allPrice = EconomyEnchant::getInstance()->getConfig()->get("enchantment");
+        if(isset($allPrice[$nameId])) {
+            return $allPrice[$nameId]["price"];
+        }
 
-	public static function getPriceInConfig(string $nameId) : ?int{
-		$allPrice = EconomyEnchant::getInstance()->getConfig()->get("enchantment");
-		if(isset($allPrice[$nameId])){
-			return $allPrice[$nameId]["price"];
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public static function getEnchantByItem(Item $item): array
+    {
+        $result = [];
 
-	public static function getEnchantByItem(Item $item) : array{
-		$result = [];
+        foreach(self::$enchant as $display => $value) {
+            if(self::isEnchantBlacklisted($value["name"])) {
+                continue;
+            }
+            if(self::isItemBlacklisted($item, $value["name"])) {
+                continue;
+            }
 
-		foreach(self::$enchant as $display => $value){
-			if(self::isEnchantBlacklisted($value["name"])) continue;
-			if(self::isItemBlacklisted($item, $value["name"])) continue;
+            $check = new $value["compatible"]();
+            if($check->isCompatibleWith($value["enchant"], $item)) {
+                $result[$display] = ["display" => $display, "price" => $value["price"], "enchant" => $value["enchant"]];
+            }
+        }
 
-			$check = new $value["compatible"]();
-			if($check->isCompatibleWith($value["enchant"], $item)){
-				$result[$display] = ["display" => $display, "price" => $value["price"], "enchant" => $value["enchant"]];
-			}
-		}
+        return $result;
+    }
 
-		return $result;
-	}
+    public static function isEnchantBlacklisted(string $nameId): bool
+    {
+        $blacklist = array_map("strtolower", EconomyEnchant::getInstance()->getConfig()->get("blacklist")); // Getting all List blacklisted Config
 
-	public static function isEnchantBlacklisted(string $nameId) : bool{
-		$blacklist = array_map("strtolower", EconomyEnchant::getInstance()->getConfig()->get("blacklist")); // Getting all List blacklisted Config
+        return in_array($nameId, $blacklist, true);
+    }
 
-		return in_array($nameId, $blacklist, true);
-	}
+    public static function isItemBlacklisted(Item $item, string $nameId): bool
+    {
+        $blacklist = EconomyEnchant::getInstance()->getConfig()->get("blacklist-item"); // Getting all List blacklisted Config
 
-	public static function isItemBlacklisted(Item $item, string $nameId) : bool
-	{
-		$blacklist = EconomyEnchant::getInstance()->getConfig()->get("blacklist-item"); // Getting all List blacklisted Config
+        if (isset($blacklist[$nameId])) { // check if enchantment blacklist
+            foreach ($blacklist[$nameId] as $itemall) {
+                $itemb = StringToItemParser::getInstance()->parse($itemall);
+                if ($item->equals($itemb, true, false)) { // check if item same
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-		if (isset($blacklist[$nameId])) { // check if enchantment blacklist
-			foreach ($blacklist[$nameId] as $itemall) {
-				// Preparing get Item Legacy String
-				$itemname = LegacyItemIdToStringIdMap::getInstance()->legacyToString($item->getId());
-				$itemname = str_replace("minecraft:", "", $itemname);
-				if ($itemname == $itemall) { // check if item same
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+    /** @return void */
+    public static function enchantItem(Player $player, Enchantment $enchant, int $level): void
+    {
+        $item = $player->getInventory()->getItemInHand();
+        $item->addEnchantment(new EnchantmentInstance($enchant, $level)); // Add Enchantment
+        $player->getInventory()->setItemInHand($item); // Send back item to Player
+    }
 
-	/** @return void */
-	public static function enchantItem(Player $player, Enchantment $enchant, int $level) : void
-	{
-		$item = $player->getInventory()->getItemInHand();
-		$item->addEnchantment(new EnchantmentInstance($enchant, $level)); // Add Enchantment
-		$player->getInventory()->setItemInHand($item); // Send back item to Player
-	}
+    /**
+     * @var Player $player
+     */
+    public static function sendSound(Player $player): void
+    {
+        // Checking if Sound play is true
+        if(!EconomyEnchant::getInstance()->getConfig()->get("sound")) {
+            return;
+        }
 
-	/**
-	 * @var Player $player
-	 */
-	public static function sendSound(Player $player) : void
-	{
-		// Checking if Sound play is true
-		if(!EconomyEnchant::getInstance()->getConfig()->get("sound")) return;
+        $pos = $player->getPosition();
+        $packet = PlaySoundPacket::create("random.anvil_use", $pos->getFloorX(), $pos->getFloorY(), $pos->getFloorZ(), 1.0, 1.0);
+        $player->getNetworkSession()->sendDataPacket($packet);
+    }
 
-		$pos = $player->getPosition();
+    public static function getItemFlags(Item $item): ?int
+    {
+        if ($item instanceof Armor) {
+            $slot = $item->getArmorSlot();
+            $slotMapping = [
+                ArmorInventory::SLOT_HEAD => ItemFlags::HEAD,
+                ArmorInventory::SLOT_CHEST => ItemFlags::TORSO,
+                ArmorInventory::SLOT_LEGS => ItemFlags::LEGS,
+                ArmorInventory::SLOT_FEET => ItemFlags::FEET
+            ];
+            return $slotMapping[$slot] ?? null;
+        } else {
+            $itemClass = get_class($item);
+            $itemFlags = [
+                Sword::class => ItemFlags::SWORD,
+                Axe::class => ItemFlags::AXE,
+                Pickaxe::class => ItemFlags::PICKAXE,
+                Shovel::class => ItemFlags::SHOVEL,
+                Hoe::class => ItemFlags::HOE,
+                Shears::class => ItemFlags::SHEARS,
+                FlintSteel::class => ItemFlags::FLINT_AND_STEEL,
+                FishingRod::class => ItemFlags::FISHING_ROD,
+                Bow::class => ItemFlags::BOW
+            ];
 
-		$packet = new PlaySoundPacket();
-		$packet->soundName = "random.anvil_use";
-		$packet->x = $pos->getFloorX();
-		$packet->y = $pos->getFloorY();
-		$packet->z = $pos->getFloorZ();
-		$packet->volume = 1.0;
-		$packet->pitch = 1.0;
+            return $itemFlags[$itemClass] ?? null;
+        }
 
-		$player->getNetworkSession()->sendDataPacket($packet);
-	}
+        return null;
+    }
 
-	public static function getItemFlags(Item $item) : ?int
-	{
-		if ($item instanceof Armor) {
-			$slot = $item->getArmorSlot();
-			if ($slot == ArmorInventory::SLOT_HEAD) {
-				return ItemFlags::HEAD;
-			} elseif ($slot == ArmorInventory::SLOT_CHEST) {
-				return ItemFlags::TORSO;
-			} elseif ($slot == ArmorInventory::SLOT_LEGS) {
-				return ItemFlags::LEGS;
-			} elseif ($slot == ArmorInventory::SLOT_FEET) {
-				return ItemFlags::FEET;
-			}
-		} elseif ($item instanceof Sword) {
-			return ItemFlags::SWORD;
-		} elseif ($item instanceof Axe) {
-			return ItemFlags::AXE;
-		} elseif ($item instanceof Pickaxe) {
-			return ItemFlags::PICKAXE;
-		} elseif ($item instanceof Shovel) {
-			return ItemFlags::SHOVEL;
-		} elseif ($item instanceof Hoe) {
-			return ItemFlags::HOE;
-		} elseif ($item instanceof Shears) {
-			return ItemFlags::SHEARS;
-		} elseif ($item instanceof FlintSteel) {
-			return ItemFlags::FLINT_AND_STEEL;
-		} elseif ($item instanceof FishingRod) {
-			return ItemFlags::FISHING_ROD;
-		} elseif ($item instanceof Bow) {
-			return ItemFlags::BOW;
-		}
-		return null;
-	}
-
-	/** @return string */
-	public static function numberToRoman(int $number) : string
-	{
-		$roman = ["M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100, "XC" => 90, "L" => 50, "XL" => 40, "X" => 10, "IX" => 9, "V" => 5, "IV" => 4, "I" => 1];
-		$return = "";
-		while ($number > 0) {
-			foreach ($roman as $value => $int) {
-				if ($number >= $int) {
-					$number -= $int;
-					$return .= $value;
-					break;
-				}
-			}
-		}
-		return $return;
-	}
+    /** @return string */
+    public static function numberToRoman(int $number): string
+    {
+        $roman = ["M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100, "XC" => 90, "L" => 50, "XL" => 40, "X" => 10, "IX" => 9, "V" => 5, "IV" => 4, "I" => 1];
+        $return = "";
+        while ($number > 0) {
+            foreach ($roman as $value => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $return .= $value;
+                    break;
+                }
+            }
+        }
+        return $return;
+    }
 }

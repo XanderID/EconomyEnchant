@@ -7,14 +7,14 @@ projects:
     path: ""
     icon: "icon.png"
     libs:
-      - src: Vecnavium/FormsUI/FormsUI
-        version: ^1.0.0
-      - src: ifera-mc/UpdateNotifier/UpdateNotifier
+      - src: jojoe77777/FormAPI/libFormAPI
+        version: ^2.1.1
+      - src: LatamPMDevs/UpdateNotifier/UpdateNotifier
         version: ^3.0.0
-      - src: ifera-mc/ConfigUpdater/ConfigUpdater
-        version: ^2.0.0
+      - src: LatamPMDevs/ConfigUpdater/ConfigUpdater
+        version: ^2.0.1
       - src: muqsit/InvMenu/InvMenu
-        branch: "4.0"
-        version: ^4.4.1
+        branch: "pm5"
+        version: ^4.6.2
     lint: false
 ...

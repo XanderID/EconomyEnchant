@@ -1,15 +1,13 @@
 ---
 name: EconomyEnchant
-version: 1.0.3
+version: 1.0.4
 main: XanderID\EconomyEnchant\EconomyEnchant
-api: 4.0.0
+api: 5.0.0
 author: XanderID
 description: a EconomyEnchant Shop in UI
+mcpe-protocol: 589
 softdepend:
- - EconomyAPI
  - BedrockEconomy
- - Capital
- - PiggyCustomEnchants
  - VanillaEC
 
 permissions:

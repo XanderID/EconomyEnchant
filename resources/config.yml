@@ -1,14 +1,11 @@
 ---
 # Please don't edit this, only for internal use
-config-version: 2
+config-version: 3
 
 # Your Economy plugin name
-# Available: BedrockEconomy, EconomyAPI, Capital, XP, Auto
+# Available: BedrockEconomy, XP, Auto
 # If you select auto but there is no Economy Plugin it will automatically use XP
 economy: "Auto"
-
-# Selector for Capital Economys
-selector: []
 
 # Can EnchantTable Redirect to EconomyEnchant
 enchant-table: true
@@ -123,6 +120,5 @@ blacklist: []
 # example: 
 # blacklist:
 #  sharpness: ["diamond_sword"]
-# If you want add meta just item_name:meta
 blacklist-item: []
 ...
