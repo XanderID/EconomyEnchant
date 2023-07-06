@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Manager\Enchantment;
+namespace MulqiGaming64\EconomyEnchant\Manager\Enchantment;
 
-use XanderID\EconomyEnchant\Manager\EnchantManager;
+use MulqiGaming64\EconomyEnchant\Manager\EnchantManager;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 

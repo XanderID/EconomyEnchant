@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Transaction\Shop;
+namespace MulqiGaming64\EconomyEnchant\Transaction\Shop;
 
-use XanderID\EconomyEnchant\EconomyEnchant;
-use XanderID\EconomyEnchant\Manager\EnchantManager;
+use MulqiGaming64\EconomyEnchant\EconomyEnchant;
+use MulqiGaming64\EconomyEnchant\Manager\EnchantManager;
 use pocketmine\player\Player;
 use jojoe77777\FormAPI\SimpleForm;
 use jojoe77777\FormAPI\CustomForm;

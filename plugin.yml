@@ -1,7 +1,7 @@
 ---
 name: EconomyEnchant
 version: 1.0.4
-main: XanderID\EconomyEnchant\EconomyEnchant
+main: MulqiGaming64\EconomyEnchant\EconomyEnchant
 api: 5.0.0
 author: XanderID
 description: a EconomyEnchant Shop in UI

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Provider\Types;
+namespace MulqiGaming64\EconomyEnchant\Provider\Types;
 
 use cooldogedev\BedrockEconomy\api\BedrockEconomyAPI;
 use cooldogedev\BedrockEconomy\api\version\LegacyBEAPI;
 use cooldogedev\BedrockEconomy\api\legacy\ClosureContext;
 
-use XanderID\EconomyEnchant\EconomyEnchant;
-use XanderID\EconomyEnchant\Provider\Provider;
+use MulqiGaming64\EconomyEnchant\EconomyEnchant;
+use MulqiGaming64\EconomyEnchant\Provider\Provider;
 use pocketmine\player\Player;
 
 class BedrockEconomy extends Provider

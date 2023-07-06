@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Manager;
+namespace MulqiGaming64\EconomyEnchant\Manager;
 
-use XanderID\EconomyEnchant\EconomyEnchant;
-use XanderID\EconomyEnchant\Manager\Enchantment\Enchant;
+use MulqiGaming64\EconomyEnchant\EconomyEnchant;
+use MulqiGaming64\EconomyEnchant\Manager\Enchantment\Enchant;
 use pocketmine\item\StringToItemParser;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
@@ -49,7 +49,7 @@ class EnchantManager
     public static function register(string $nameId, string $displayName, int $price, Enchantment $enchant, $compatible): void
     {
         if(!is_a($compatible, Enchant::class, true)) {
-            throw new \RuntimeException("Compatible class must be Extends to \XanderID\EconomyEnchant\Manager\Enchantment\Enchant");
+            throw new \RuntimeException("Compatible class must be Extends to \MulqiGaming64\EconomyEnchant\Manager\Enchantment\Enchant");
         }
 
         self::$enchant[$displayName] = ["name" => $nameId, "price" => $price, "enchant" => $enchant, "compatible" => $compatible];

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Transaction;
+namespace MulqiGaming64\EconomyEnchant\Transaction;
 
 class Transaction
 {

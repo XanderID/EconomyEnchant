@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Item;
+namespace MulqiGaming64\EconomyEnchant\Item;
 
 use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;

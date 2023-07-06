@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant;
+namespace MulqiGaming64\EconomyEnchant;
 
 use pocketmine\block\EnchantingTable;
 use pocketmine\event\Listener as PMListener;

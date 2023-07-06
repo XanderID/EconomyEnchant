@@ -29,7 +29,7 @@ Commands | Default
 Do you want to register your enchant Into this EnchantShop, Please follow this [Wiki](https://github.com/XanderID/EconomyEnchant/wiki/Registering-Enchantment)
 
 ## API
-First Import Class XanderID\EconomyEnchant\Manager\EnchantManager</br>
+First Import Class MulqiGaming64\EconomyEnchant\Manager\EnchantManager</br>
 - Getting Item Flags
   * EnchantManager::getItemFlags(/** Items you want */);
 - Checking if Enchant Blacklisted

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace XanderID\EconomyEnchant\Commands;
+namespace MulqiGaming64\EconomyEnchant\Commands;
 
-use XanderID\EconomyEnchant\EconomyEnchant;
+use MulqiGaming64\EconomyEnchant\EconomyEnchant;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
