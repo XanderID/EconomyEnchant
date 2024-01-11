@@ -273,7 +273,6 @@ class EconomyEnchant extends PluginBase
         $all = [
             EnchantmentIds::BANE_OF_ARTHROPODS => $encmap->fromId(EnchantmentIds::BANE_OF_ARTHROPODS),
             EnchantmentIds::LOOTING => $encmap->fromId(EnchantmentIds::LOOTING),
-            EnchantmentIds::FORTUNE => $encmap->fromId(EnchantmentIds::FORTUNE),
             EnchantmentIds::SMITE => $encmap->fromId(EnchantmentIds::SMITE)
         ];
 
